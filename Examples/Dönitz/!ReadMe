@@ -1,0 +1,30 @@
+This directory contains a real example of a message excripted
+on an M4 Enigma and sent by Dönitz towards the end of WWII to
+his U-boats.
+
+The file 'Original' contains the full original message.
+
+Decrypting the message goes as follows:
+
+(1) First set the Enigma to the settings of that day by double
+    clicking the 'Setup' file.
+
+(2) Type the fist 8 characters of the original message.
+    Alternatively drag the file 'Initial' into the Enigma
+    window. This should reveal two identical groups of 4
+    characters each. Set the wheels on the Enigma to this
+    setting (ASTV).
+
+(3) Now type the rest of the message, or drag the file
+    'Message' into the Enigma window. The rest of the message
+    should now be decripted.
+
+Please note that it may still be difficult to read the resulting
+message. First of all it's in German and secondly, all spaces
+are replaced by an 'X'. Characters like 'ö' are expanded to 'oe'
+as is common practice in German.
+
+Please refer to chapter 10.4 of the Enigma HTML manual for a
+full description of the context of this message.
+
+

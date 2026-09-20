@@ -1,0 +1,20 @@
+# USER
+| User settings saved Fri,03 Jan 2003.10:15:13
+| Enigma 1.22 (03 Jan 2003)
+
+Profile = M4
+Skin = M-10233
+
+[Rotors]
+Rings = ASOD
+Order = C215
+Start = AMZI
+
+[UKW]
+Select = C
+Ring = A
+Start = A
+
+[Steckers]
+Matrix = DUCANHGFXZVRYEOPQLWTBKSIMJ
+

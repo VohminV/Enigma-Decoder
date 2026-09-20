@@ -1,0 +1,72 @@
+Enigma G - An Enigma with many notches
+======================================
+
+Introduction
+------------
+Most Enigma machines work according to the same mechanical
+principle. In fact the wheel mechanism of the service Enigma
+was itentical to that of the commercial Enigma, the differnece
+being the modified wiring of the wheels, a multiplicy of
+different wheels and, of course, the addition of a Steckerbrett.
+
+There is one exception however: the Enigma G. Rather than using
+the wheel mechanism of the service Enigma, based on a system
+of notches and levers, it uses some kind of 'gearbox', much
+like the odometer of a car. As a result of this, it doesn't
+feature the double stepping anomaly found in the other Enigma
+machines (see example file 'DoubleStep').
+
+Stolen Enigma G-312
+-------------------
+Some time ago, the very rare Enigma G with serial number '312'
+was stolen from the exhibition in Blechley Park and was later
+misteriously returned after many requests for randsom.
+
+To ease the return of the machine, David Hamer has written an
+extensive desciption about this rare device, so that it would
+be easier to recognise if it would be offered to someone.
+
+Enigma G
+--------
+The Enigma G is not equipped with a Steckerbrett, which in fact
+makes it much less save that the standard service Enigma.
+Furthermore it comes with a set of only 3 wheels, that can be
+used in any of the last 3 positions. Only one UKW is available,
+but it may be moved by the other wheels during encipherment.
+
+The big difference between this machine and the service ones
+however, is the fact the all three wheel have many notches
+(11, 15 and 17 respectively) which will cause very frequent
+wheel changeovers. And that makes decryption more difficult!
+
+To see the frequent changeovers, place the wheels in the order
+3, 2 and 1 and set the initial position to NZAM. You may want
+to do the same for an M4 Enigma, so that you can make a
+comparison.
+
+Enigma G vs Enigma M4
+---------------------
+Setup both an Enigma G and an Enigma M4 as described above,
+or load the Enigma file available in this directory. Press
+10 keys on both Enigma machines and observe the letters in
+the wheel windows. You should see the following:
+
+   Key G312  M4
+   --- ---- ----
+   0   NZAM NZAM  (Start position)
+   1   NZAN NZAN
+   2   NZAO NZAO
+   3   NABP NZAP
+   4   NACQ NZAQ ]
+   5   OBDR NZBR ]
+   6   OBDS NZBS
+   7   OCET NZBT
+   8   OCEU NZBU
+   9   OCFV NZBV
+   10  ODGW NZBW
+
+*] Please the occurence of a so called 'Lobster' between
+positions 4 and 5 on the G312. The term 'Lobster' was used
+to indicate the fact that all 4 rotors move with a single
+key press.
+

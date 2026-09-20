@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+virtualenv/
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# Logs (не скрывает исходники; enigma_gui.log генерируется при запуске)
+*.log
+
+# Generated / local runtime data (не скрывает keys.json и Examples/)
+*.bak
+benchmark_*.json
+benchmark_*.csv
+ocr_output/
+tmp_images/
+*.tmp
+
+# Local user database overrides (исходная keys.json НЕ игнорируется)
+keys_local.json
+keys_export.json
+
+# Packaging
+dist/
+build/
+*.egg-info/
+*.exe
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store

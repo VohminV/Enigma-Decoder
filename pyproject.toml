@@ -1,0 +1,41 @@
+[project]
+name = "enigma-decoder"
+version = "0.1.0"
+description = "Enigma I/M3/M4/G/K/D decryptor with PySide6 GUI, historical key database and OCR"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Enigma Decoder" }]
+
+# Runtime: только то, что реально импортируется кодом.
+# enigma.py/keydb.py/services.py — stdlib only.
+# gui/* — PySide6. ocr/* — opencv, numpy, Pillow, rapidocr, pymupdf.
+dependencies = [
+    "PySide6>=6.6,<7",
+    "numpy>=1.26",
+    "Pillow>=10",
+    "opencv-python>=4.8",
+    "rapidocr>=3.0",
+    "pymupdf>=1.23",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    # Reference-движок для differential-тестов (AUD-008). Только тесты:
+    # production-код его не импортирует.
+    "py-enigma==1.0.2",
+]
+
+[project.scripts]
+enigma-decoder = "main:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["gui*", "ocr*"]
+
+[tool.pytest.ini_options]
+testpaths = ["."]

@@ -1,0 +1,55 @@
+Double stepping of the middle rotor
+===================================
+
+Introduction
+------------
+Due to some mechanical differences between the various Enigma
+models, messages ecrypted on one device may or may not decode
+correctly on another one. One such mechanical difference is the
+rotor transport mechanism. Most Enigma models have a transport
+system consisting of levers and notches whereby one wheel can
+engage the next wheel to step also.
+
+Due to this mechanical principle, the middle rotor may step
+twice under certain conditions, on two consecutive key presses.
+This phenomena is called the double stepping anomaly and can
+be seen on all standard Enigma models.
+
+An exeption to this rule are the Abwehr models (Enigma G), who
+use a gear box for stepping the wheels, rather than a system of
+levers and notches. The principle of the gear box is much like
+that of an odometer, and does not suffer from the double stepping
+behaviour of the middle rotor.
+
+The double stepping behaviour is described in great detail in a
+Paper by David Hamer, published in Cryptologia. A copy of this
+article can be found at:
+
+   http://www.eclipse.net/~dhamer/download.htm
+
+Simulation
+----------
+In his article, David describes a specific start position of
+an M4 Enigma, that will show the double stepping anomaly
+within a few keypresses. Setup the Enigma to use wheels 3,
+2 and 1 in the last three positions. Next set the last three
+wheels to show : ADO.
+
+Alternatively, load the Enigma file 'M4_ADO' from this directory.
+
+Type away on the keyboard and watch the sequence in the wheel
+windows closely. THe following steps should be observed:
+
+   Wheel 3 2 1
+   -----------
+         A D O
+         A D P
+         A D Q
+         A E R <-- 2nd wheel, 1st step
+         B F S <-- 2nd wheel, 2nd step
+         B F T
+         B F U
+
+This sequence can be especially useful to test any software
+Enigma simulator for correct behaviour, as many programmers
+hve been found to omit this feature.

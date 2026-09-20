@@ -1,0 +1,247 @@
+{
+  "entries": [
+    {
+      "date": "1941-07-07",
+      "greek": null,
+      "id": "heer-1941-07-07",
+      "messages": [
+        {
+          "grundstellung": "BUO",
+          "id": "spruch-18",
+          "indicator": "IHO",
+          "kenngruppe": "ENSIV",
+          "key": "RAS",
+          "notes": "",
+          "verified": "indicator"
+        },
+        {
+          "cipher": "SAYQYFNGVBNIDLQGCTAYNLPJDTBQCUKKEHTHHLQZQYVNYMZDMUZRGIHTFELHJHAY",
+          "cipher_notes": "published cipher has transposed pair TH at msg positions 33-34 (KKETHH); corrected here to HT (KKEHTH). With published form decrypt differs in 2 letters.",
+          "cipher_published": "SAYQYFNGVBNIDLQGCTAYNLPJDTBQCUKKETHHHLQZQYVNYMZDMUZRGIHTFELHJHAY",
+          "grundstellung": "RIA",
+          "id": "spruch-19",
+          "indicator": "QDB",
+          "kenngruppe": "TFZGU",
+          "key": "WUQ",
+          "notes": "source table lists key WUO (typo); enc(WUQ@RIA)=QDB proves WUQ. Page plaintext matches corrected decrypt exactly.",
+          "plain": "ERBITTEAUFKLAERUNGSFLIEGERUEBERXSEBESHXSEBESHXUNDXNOERDLIQXDAVON",
+          "verified": "full"
+        },
+        {
+          "grundstellung": "WXC",
+          "id": "spruch-20a",
+          "indicator": "KCH",
+          "kenngruppe": "RFUGZ",
+          "key": "BLA",
+          "notes": "",
+          "verified": "indicator"
+        },
+        {
+          "grundstellung": "CRS",
+          "id": "spruch-20b",
+          "indicator": "YPJ",
+          "kenngruppe": "FNJAU",
+          "key": "LSD",
+          "notes": "",
+          "verified": "indicator"
+        }
+      ],
+      "model": "M3",
+      "network": "LVI. Armeekorps (HGr. Nord)",
+      "notes": "Source writes Walzenlage as 'Beta, II, IV, V' (simulator display quirk); effectively 3 wheels II IV V, UKW B. 'Beta' = UKW-B misnomer on that page. Rings/positions are 3 letters, M3 confirmed by all checks.",
+      "plugs": "AV BS CG DL FU HZ IN KM OW RX",
+      "reflector": "B",
+      "rings": "BUL",
+      "rings_alt": [],
+      "service": "Heer",
+      "sources": [
+        "https://rostfrank.de/info/lex09/maschines/enigma/e_messages.html",
+        "https://rostfrank.de/info/lex09/maschines/enigma/e_decode02.html",
+        "https://rostfrank.de/info/lex09/maschines/enigma/e_decode03.html"
+      ],
+      "status": "verified",
+      "wheels": [
+        "II",
+        "IV",
+        "V"
+      ]
+    },
+    {
+      "date": "1941-07-13",
+      "greek": null,
+      "id": "heer-1941-07-13",
+      "messages": [
+        {
+          "cipher": "MXDHZVPVUJTKXCRNSLFIOIMYHLOSYYFXJYBWBOIFHPDDNFXWJLDAXNGLHQVWDQZBXQZFYFEBSEOGFXUOTVLGLQLUDNINLPDOKNXEWVEIAOPLKUSLDTLPRNKCOWZKPTZWXDRIALLTTYVSDIUT",
+          "cipher_notes": "144 letters (Kenngruppe KHGPR excluded). Source page shows longer plaintext, but transcribed cipher groups cover exactly these 144 letters; verified exact match.",
+          "grundstellung": "VIN?",
+          "id": "spruch-24a",
+          "indicator": "ZOV?",
+          "kenngruppe": "KHGPR",
+          "key": "OXE",
+          "notes": "Source indicator row (VIN ZOV) does not reproduce OXE on this key; Grundstellung/indicator for this part appear mistyped in the source table. Key OXE itself is proven by the full 144-letter decrypt below and chains to part II (OCS). Plain stored = verified 144-char segment.",
+          "plain": "ANROEMFUENFSEQSXARMXKORPSXSTRASZEVONXSCHEMJAKINAXSCHEMJAKINAXBISUNTERKUNFTSRAUMSIEGFRIEDSIEGFRIEDXTONIXDIVXFREIXJEDOQGESPERRTDURQVERKEHRSORGANEX",
+          "verified": "full"
+        },
+        {
+          "grundstellung": "OCS",
+          "id": "spruch-24b",
+          "indicator": "ILY",
+          "kenngruppe": "YSPQR",
+          "key": "LMA",
+          "notes": "",
+          "verified": "indicator"
+        },
+        {
+          "grundstellung": "HLC",
+          "id": "spruch-25",
+          "indicator": "ZMZ",
+          "kenngruppe": "FHPQX",
+          "key": "SDV",
+          "notes": "No cipher text preserved on source page (indicator only).",
+          "verified": "indicator"
+        }
+      ],
+      "model": "M3",
+      "network": "LVI. Armeekorps (HGr. Nord)",
+      "notes": "Main page lists plugs with AV (letter V used twice: AV..QV) — typo; sub-page e_decode05 lists AD, which is consistent and verifies. Rings/positions 3 letters: M3.",
+      "plugs": "AD EH GY IM KN LR OZ QV TX UW",
+      "reflector": "B",
+      "rings": "GTO",
+      "rings_alt": [],
+      "service": "Heer",
+      "sources": [
+        "https://rostfrank.de/info/lex09/maschines/enigma/e_messages.html",
+        "https://rostfrank.de/info/lex09/maschines/enigma/e_decode05.html",
+        "https://rostfrank.de/info/lex09/maschines/enigma/e_decode05a.html"
+      ],
+      "status": "verified",
+      "wheels": [
+        "IV",
+        "II",
+        "III"
+      ]
+    },
+    {
+      "date": "1945-04-30",
+      "greek": "Beta",
+      "id": "km-1945-04-30-potsdam",
+      "messages": [
+        {
+          "cipher": "LANOTCTOUARBBFPMHPHGCZXTDYGAHGUFXGEWKBLKGJWLQXXTGPJJAVTOYJFGSLPPQIHZFXOEBWIIEKFZLCLOAQJULJOYHSSMBBGWHZANVOIIPYRBRTDJQDJJOQKCXWDNBBTYVXLYTAPGVEATXSONPNYNQFUDBBHHVWEPYEYDOHNLXKZDNWRHDUWUJUMWWVIIWZXIVIUQDRHYMNCYEFUAPNHOTKHKGDNPSAKNUAGHJZSMJBMHVTREQEDGXHLZWIFUSKDQVELNMIMITHBHDBWVHDFYHJOQIHORTDJDBWXEMEAYXGYQXOHFDMYUXXNOJAZRSGHPLWMLRECWWUTLRTTVLBHYOORGLGOWUXNXHMHYFAACQEKTHSJW",
+          "cipher_notes": "372 letters; indicator groups DUHF TETO excluded. Documented garbles in the middle (sea-damaged sheet, morse errors).",
+          "grundstellung": "NAEM",
+          "id": "P1030681-doenitz",
+          "indicator": "QEOB",
+          "kenngruppe": null,
+          "key": "CDSZ",
+          "notes": "Doenitz appointment message. Indicator procedure: DUHF TETO -> QEOB; QEOB@NAEM -> CDSZ.",
+          "plain_prefix": "KRKRALLEXXFOLGENDESISTSOFORTBEKANNTZUGEBEN",
+          "verified": "prefix"
+        }
+      ],
+      "model": "M4",
+      "network": "Key Potsdam (Allied codename Plaice), U-534 traffic",
+      "notes": "Daily key recovered by Dan Girard (hillclimb) except rings: source lists AAEL/EPEL. EPEL verified effective here (message key CDSZ). Greek/left rings influence the cipher, so AAEL would give a different machine state; EPEL is the message-effective setting.",
+      "plugs": "AE BF CM DQ HU JN LX PR SZ VW",
+      "reflector": "Thin-C",
+      "rings": "EPEL",
+      "rings_alt": [
+        "AAEL"
+      ],
+      "service": "Kriegsmarine",
+      "sources": [
+        "https://enigma.hoerenberg.com/index.php?cat=The+U534+messages&page=The+messages",
+        "https://www.cryptomuseum.com/crypto/enigma/msg/p1030681.htm"
+      ],
+      "status": "verified",
+      "wheels": [
+        "V",
+        "VI",
+        "VIII"
+      ]
+    },
+    {
+      "date": "1945-05-01",
+      "greek": "Gamma",
+      "id": "km-1945-05-01-potsdam",
+      "messages": [
+        {
+          "cipher": "RFBYWKIKELDCHBSXUNFJFSNRRVFWASXYLQCQFADYJXNTBMVLRDCGULOWHTBGWUSSOQHGAYEDKMJDNGVZNZFOXFKMIBKQNXFDWFIVGCYMJVQCKYQFBHYKZSCJ",
+          "cipher_notes": "",
+          "grundstellung": null,
+          "id": "P1030684",
+          "indicator": null,
+          "kenngruppe": null,
+          "key": "VYAA",
+          "notes": "First ciphertext-only break (TBreaker, 31.07.2012).",
+          "plain": "VVVUUUVIRSOBENNULEINSXXMITUUUVIRSIBENNULZWOYVIRSIBENNULDREIYZWODREISECHSEINSYZWODREIDREIACHTEINSDREIOITNACHWZSTENPASSIRT",
+          "verified": "full"
+        },
+        {
+          "cipher": "DLYDINPOKAJBBJBXVVJIGZWBXYWWJSFXQFISWKPJBVHXBMBPEOIDZXSOVOGGWFVBBCPLXRZSJJNHLCCTAMGCOJAOJKTIPESWJWKGSGSFRLCSUSAICUZUNFUJCOAYNGPTLCCGGUASEWHDEZHFWEDW",
+          "cipher_notes": "",
+          "grundstellung": null,
+          "id": "P1030725",
+          "indicator": null,
+          "kenngruppe": null,
+          "key": "EBJC",
+          "notes": "Turing-Bombe break (112 cores, 5.5h); crib YPJY ZOOM from original plaintext on sheet.",
+          "plain": "UUUZWONEUNEINSYTTTFFREINSSIBENVONVONFXDXUUUOSTXXUUUZWONEUNEINSSOFORTAUFGABEABBRECHENUNDJRADEJKMSIBENNZLYFUNFKOMMENXTTTFFFVINSSIBENUEBERMITTLUNGSICHE",
+          "verified": "full"
+        }
+      ],
+      "model": "M4",
+      "network": "Key Potsdam (Allied codename Plaice), U-534 traffic",
+      "notes": "Daily key recovered by M. Hoerenberg (Turing-Bombe + hillclimb). Source lists rings AACU/VCCH; VCCH is the original ring setting recovered by D. Girard (messages also work with it at original positions, e.g. P1030682/HXYL). AACU verified effective here.",
+      "plugs": "CH EJ NV OU TY LG SZ PK DI QB",
+      "reflector": "Thin-B",
+      "rings": "AACU",
+      "rings_alt": [
+        "VCCH"
+      ],
+      "service": "Kriegsmarine",
+      "sources": [
+        "https://enigma.hoerenberg.com/index.php?cat=The+U534+messages&page=The+messages",
+        "https://enigma.hoerenberg.com/index.php?cat=Breaking+the+M4&page=First+U534+Ciphertext+only+break",
+        "https://enigma.hoerenberg.com/index.php?cat=Breaking+the+M4&page=Key+of+the+day+break"
+      ],
+      "status": "verified",
+      "wheels": [
+        "IV",
+        "III",
+        "VIII"
+      ]
+    },
+    {
+      "date": "1945-05-02",
+      "greek": "Gamma",
+      "id": "km-1945-05-02-potsdam",
+      "messages": [
+        {
+          "id": "P1030713",
+          "notes": "Only message attributed to this key; cipher not in DB.",
+          "verified": "none"
+        }
+      ],
+      "model": "M4",
+      "network": "Key Potsdam (Allied codename Plaice), U-534 traffic",
+      "notes": "Daily key found by the Enigma@Home project (20.06.2013). Included as published; no test message with known key in DB yet, so engine-verification is pending.",
+      "plugs": "CP DG EJ FI KT LZ MS NO QU RW",
+      "reflector": "Thin-C",
+      "rings": "AAFB",
+      "rings_alt": [],
+      "service": "Kriegsmarine",
+      "sources": [
+        "https://enigma.hoerenberg.com/index.php?cat=The+U534+messages&page=The+messages"
+      ],
+      "status": "published",
+      "wheels": [
+        "V",
+        "II",
+        "VIII"
+      ]
+    }
+  ],
+  "version": 1
+}
