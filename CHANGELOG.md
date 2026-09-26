@@ -16,6 +16,11 @@
   `press`/`set_positions` валидация, лимиты текста/файлов/БД/sweep,
   санитизация plugboard-диалога, workers без QWidget-parent,
   отсутствие key-material в логах.
+- Тесты `tests/test_release_gate.py` (21 тест): версия/лицензия/доки,
+  entry points, data files, experimental-статус G/K/D, deprecation алиасов,
+  wiring настроек, отсутствие опасных API, round-trip всех моделей.
+- `docs/RELEASE_GATE.md`: воспроизводимые ворота релиза
+  (139 passed без флагов, ruff clean, build+twine passed, wheel-smoke).
 - DoS-лимиты: `enigma.MAX_TEXT_CHARS` (1M), `enigma.MAX_FILE_BYTES` (5МБ),
   `keydb.MAX_DB_BYTES` (10МБ), OCR 50МП/30МБ, PDF DPI 72..400,
   `positions_sweep(max_results=100_000)`.

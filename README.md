@@ -120,10 +120,12 @@ python tools/evaluate_ocr.py  # оценка OCR (при наличии данн
 python -m pytest       # pytest-сюиты: specs 8 моделей, benchmark, validation,
                        # atomic writes, workers/shutdown, differential vs py-enigma,
                        # contracts, scoring, experimental cracker, fast enigma,
-                       # search experiments
+                       # search experiments, release hardening + release gate
 ```
 
-Все вышеперечисленное на момент релиза: `ALL OK` (pytest: 52 passed).
+Все вышеперечисленное на момент релиза 1.0.0: `ALL OK` (pytest: 139 passed
+без дополнительных флагов; hydra-плагин точечно отключён в `pyproject.toml`,
+см. `docs/RELEASE_GATE.md`).
 
 ## Структура
 
