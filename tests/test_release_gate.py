@@ -74,9 +74,9 @@ def test_entry_points_declared():
 
 
 def test_entry_point_targets_importable():
-    import main
     import enigma
     import keydb
+    import main
     assert callable(main.main)
     assert callable(enigma.main)
     assert callable(keydb.main)
@@ -124,7 +124,6 @@ def test_experimental_metadata():
 
 
 def test_gkd_construction_warns():
-    import warnings
     from enigma import EnigmaCommercial, EnigmaG
     with pytest.warns(UserWarning, match="experimental"):
         EnigmaG("G312", ("I", "II", "III"), "AAAA", "AAAA")
@@ -134,6 +133,7 @@ def test_gkd_construction_warns():
 
 def test_mline_construction_no_warning():
     import warnings
+
     from enigma import EnigmaMachine
     with warnings.catch_warnings():
         warnings.simplefilter("error")
@@ -152,6 +152,7 @@ def test_ambiguous_aliases_deprecated_but_work():
 
 def test_canonical_names_no_warning():
     import warnings
+
     from enigma import normalize_rotor
     with warnings.catch_warnings():
         warnings.simplefilter("error")
@@ -162,8 +163,9 @@ def test_canonical_names_no_warning():
 # --- настройки R-06 ---
 
 def test_loglevel_mapping():
-    from main import loglevel_to_level
     import logging
+
+    from main import loglevel_to_level
     assert loglevel_to_level("Debug") == logging.DEBUG
     assert loglevel_to_level("Normal") == logging.INFO
     assert loglevel_to_level("???") == logging.INFO
@@ -173,9 +175,10 @@ def test_settings_pages_wire_loglevel_dbpath_threads():
     pytest.importorskip("PySide6.QtWidgets")
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
-    from gui.pages.settings_page import SettingsPage
+
     from gui.pages.keys_page import KeysPage
-    app = QApplication.instance() or QApplication([])
+    from gui.pages.settings_page import SettingsPage
+    _app = QApplication.instance() or QApplication([])  # держать ссылку
     s = SettingsPage()
     assert s.loglevel.count() == 2  # Normal/Debug подключён
     assert "резерв" in s.threads.toolTip().lower() or "reserve" in s.threads.toolTip().lower() \

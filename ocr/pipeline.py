@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image
 
 from ocr import engine as engine_mod
-from ocr.models import OCRResult, NormalizedResult, Timings
+from ocr.models import OCRResult, Timings
 from ocr.postprocessing import EnigmaTextNormalizer
 from ocr.preprocessing import auto_text_region, preprocess
 

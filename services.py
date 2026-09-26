@@ -14,8 +14,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import keydb  # noqa: E402
-from enigma import (EnigmaCommercial, EnigmaG, EnigmaMachine,  # noqa: E402
-                    MACHINE_SPECS, spec_for)
+from enigma import MACHINE_SPECS, EnigmaCommercial, EnigmaG, EnigmaMachine, spec_for  # noqa: E402
 
 # Метаданные моделей для комбобоксов. Структура/размерности — из
 # enigma.MachineSpec (единый источник истины, AUD-002); здесь только

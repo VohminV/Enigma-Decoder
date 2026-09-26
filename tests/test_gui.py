@@ -26,6 +26,7 @@ try:
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont
     from PySide6.QtWidgets import QApplication
+
     from gui.main_window import MainWindow
 except ImportError as ex:
     print(f"SKIP (нет зависимости): {ex}")

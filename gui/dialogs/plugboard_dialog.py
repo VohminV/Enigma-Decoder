@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Диалог Plugboard: клик по двум буквам создаёт пару (макс. 10)."""
-from PySide6.QtWidgets import (QDialog, QGridLayout, QHBoxLayout, QLabel,
-                               QPushButton, QVBoxLayout)
+from PySide6.QtWidgets import QDialog, QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
 
 class PlugboardDialog(QDialog):

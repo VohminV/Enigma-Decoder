@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import os
 
-from enigma import EnigmaCommercial, EnigmaG, EnigmaMachine
+from enigma import EnigmaG, EnigmaMachine
 
 DIGITS = {"1": "I", "2": "II", "3": "III", "4": "IV",
           "5": "V", "6": "VI", "7": "VII", "8": "VIII",

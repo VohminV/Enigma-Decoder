@@ -5,10 +5,23 @@
 честный статус Not implemented, кнопка отключена."""
 import logging
 
-from PySide6.QtWidgets import (QComboBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel,
-                               QMessageBox, QPushButton, QProgressBar, QRadioButton,
-                               QSplitter, QTableWidget, QTableWidgetItem, QTextEdit,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QRadioButton,
+    QSplitter,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 from gui.workers.crack_worker import CrackWorker

@@ -13,9 +13,7 @@ import pytest
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 import services  # noqa: E402
-from enigma import (ALL_MODELS, parse_args, spec_for,  # noqa: E402
-                    validate_dimensions)
-
+from enigma import ALL_MODELS, parse_args, spec_for, validate_dimensions  # noqa: E402
 
 # Ожидаемые размерности из MachineSpec: model -> (wheels, rings, positions)
 EXPECTED_DIMS = {
@@ -91,6 +89,7 @@ def test_gui_widget_config_builds(model):
     pytest.importorskip("PySide6.QtWidgets")
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
+
     from gui.widgets.machine_widget import MachineWidget
     app = QApplication.instance() or QApplication([])
     w = MachineWidget()

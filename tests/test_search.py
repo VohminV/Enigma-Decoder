@@ -212,7 +212,6 @@ def test_sa_deterministic_and_cooling():
                         true_positions=TRUE_POS)
     ev = _evaluator()
     ev.bind(case.ciphertext)
-    sa = SX.SimulatedAnnealer(random.Random(11), **SX.SA_PRESETS["fast"])
     evb = _evaluator()
     evb.bind(case.ciphertext)
     sa1 = SX.SimulatedAnnealer(random.Random(11), **SX.SA_PRESETS["fast"])

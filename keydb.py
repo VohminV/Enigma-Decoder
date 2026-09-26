@@ -23,9 +23,15 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from enigma import (EnigmaCommercial, EnigmaG, EnigmaMachine,  # noqa: E402
-                    normalize_reflector, normalize_rotor, parse_plugs,
-                    spec_for)
+from enigma import (  # noqa: E402
+    EnigmaCommercial,
+    EnigmaG,
+    EnigmaMachine,
+    normalize_reflector,
+    normalize_rotor,
+    parse_plugs,
+    spec_for,
+)
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "keys.json")
 

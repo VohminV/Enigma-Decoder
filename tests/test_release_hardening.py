@@ -15,8 +15,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 import enigma  # noqa: E402
 import services  # noqa: E402
-from enigma import (EnigmaCommercial, EnigmaG, EnigmaMachine,  # noqa: E402
-                    MAX_FILE_BYTES, MAX_TEXT_CHARS)
+from enigma import (  # noqa: E402
+    MAX_TEXT_CHARS,
+    EnigmaCommercial,
+    EnigmaG,
+    EnigmaMachine,
+)
 
 
 def _m3(**kw):
@@ -150,8 +154,9 @@ def test_entry_machine_config_no_assert():
 
 
 def test_legacy_missing_field():
-    import legacy
     import tempfile
+
+    import legacy
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False,
                                      encoding="utf-8") as f:
         f.write("[rotors]\norder=123\n")
@@ -167,8 +172,9 @@ def test_plugboard_dialog_sanitizes_initial():
     pytest.importorskip("PySide6.QtWidgets")
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
+
     from gui.dialogs.plugboard_dialog import PlugboardDialog
-    app = QApplication.instance() or QApplication([])
+    _app = QApplication.instance() or QApplication([])  # держать ссылку
     dlg = PlugboardDialog("ZZ AB AB TOOLONG1", None)
     pairs = dlg.pairs()
     assert "ZZ" not in pairs.split()
@@ -179,9 +185,10 @@ def test_workers_have_no_widget_parent():
     pytest.importorskip("PySide6.QtWidgets")
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication, QWidget
+
     from gui.workers.crack_worker import CrackWorker
     from ocr.worker import OCRWorker
-    app = QApplication.instance() or QApplication([])
+    _app = QApplication.instance() or QApplication([])  # держать ссылку
     w = QWidget()
     cw = CrackWorker([], "1941-07-07", None)
     ow = OCRWorker({"kind": "image", "source": b"", "paths": []}, None)
@@ -194,8 +201,9 @@ def test_decrypt_does_not_log_key_material(caplog):
     pytest.importorskip("PySide6.QtWidgets")
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
+
     from gui.pages.decrypt_page import DecryptPage
-    app = QApplication.instance() or QApplication([])
+    _app = QApplication.instance() or QApplication([])  # держать ссылку
     page = DecryptPage()
     page.cipher.setPlainText("BDZGO")
     # ломаем конфиг напрямую: неверная размерность через services

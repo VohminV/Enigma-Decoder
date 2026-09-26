@@ -211,15 +211,15 @@ class FastEnigma:
 
     # -- stepping --
     def _step_lever(self) -> None:
-        l, m, r = (self._pos[i] for i in self._movers)
+        left, m, r = (self._pos[i] for i in self._movers)
         mm, rm = self._masks[self._movers[1]], self._masks[self._movers[2]]
         if (mm >> m) & 1:
             m = (m + 1) % 26
-            l = (l + 1) % 26
+            left = (left + 1) % 26
         if (rm >> r) & 1:
             m = (m + 1) % 26
         r = (r + 1) % 26
-        self._pos[self._movers[0]] = l
+        self._pos[self._movers[0]] = left
         self._pos[self._movers[1]] = m
         self._pos[self._movers[2]] = r
 

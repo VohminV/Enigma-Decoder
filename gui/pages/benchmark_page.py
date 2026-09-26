@@ -3,8 +3,16 @@
 """Страница Benchmark: замер ядра (реален); Fast/Cracker — Not implemented."""
 import logging
 
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                               QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 log = logging.getLogger("enigma_gui")
 

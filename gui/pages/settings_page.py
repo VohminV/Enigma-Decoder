@@ -2,9 +2,18 @@
 # -*- coding: utf-8 -*-
 """Страница Settings: тема, потоки, база, лог. Хранение — QSettings."""
 from PySide6.QtCore import QSettings
-from PySide6.QtWidgets import (QComboBox, QFileDialog, QFormLayout, QHBoxLayout,
-                               QLabel, QLineEdit, QPushButton, QSpinBox,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFileDialog,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class SettingsPage(QWidget):

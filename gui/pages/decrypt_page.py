@@ -3,8 +3,16 @@
 """Страница Decrypt: ручная шифровка/расшифровка через EnigmaCore."""
 import logging
 
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                               QSplitter, QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QSplitter,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 from gui.widgets.machine_widget import MachineWidget

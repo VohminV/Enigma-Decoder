@@ -19,7 +19,6 @@ from dataclasses import dataclass, field
 
 import scoring
 import services
-from contracts import Candidate
 from fast_enigma import FastEnigma, decode_ints, encode_text
 
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -12,13 +12,26 @@ import numpy as np
 from PIL import Image
 from PySide6.QtCore import QRect, QSettings, Qt
 from PySide6.QtGui import QColor, QImage, QPainter, QPixmap, QTextCharFormat, QTextCursor
-from PySide6.QtWidgets import (QComboBox, QFileDialog, QFormLayout, QGroupBox,
-                               QHBoxLayout, QLabel, QListWidget, QMessageBox,
-                               QProgressBar, QPushButton, QRubberBand, QSpinBox,
-                               QSplitter, QTableWidget, QTableWidgetItem,
-                               QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFileDialog,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QRubberBand,
+    QSpinBox,
+    QSplitter,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
-import services
 from ocr.models import PROFILES
 from ocr.worker import OCRWorker
 
@@ -341,7 +354,6 @@ class OCRPage(QWidget):
         self.status.setText(note or "Ready")
 
     def _open_image(self):
-        from PySide6.QtWidgets import QFileDialog
         path, _ = QFileDialog.getOpenFileName(
             self, "Open image", "",
             "Images (*.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp)")
@@ -356,7 +368,6 @@ class OCRPage(QWidget):
         self._set_array(arr, f"Loaded {path}")
 
     def _open_pdf(self):
-        from PySide6.QtWidgets import QFileDialog
         path, _ = QFileDialog.getOpenFileName(self, "Open PDF", "", "PDF (*.pdf)")
         if not path:
             return
@@ -471,8 +482,6 @@ class OCRPage(QWidget):
 
     # ---------- OCR run ----------
     def _task_base(self):
-        from PySide6.QtCore import QSettings
-        qs = QSettings("EnigmaDecoder", "enigma")
         return {"profile": self.profile_box.currentText(),
                 "mode": ({"General": "General", "Historical": "Historical"}.get(
                     self.mode_box.currentText(), "Enigma ciphertext")),
@@ -520,8 +529,10 @@ class OCRPage(QWidget):
         clicked = box.clickedButton()
         if clicked == open_btn:
             import os
-            from PySide6.QtGui import QDesktopServices
+
             from PySide6.QtCore import QUrl
+            from PySide6.QtGui import QDesktopServices
+
             from ocr.engine import RapidOCREngine
             path = RapidOCREngine().models_dir
             os.makedirs(path, exist_ok=True)
@@ -658,7 +669,6 @@ class OCRPage(QWidget):
 
     # ---------- batch ----------
     def _batch_add(self):
-        from PySide6.QtWidgets import QFileDialog
         paths, _ = QFileDialog.getOpenFileNames(
             self, "Add files", "",
             "Images (*.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp);;PDF (*.pdf)")
@@ -685,7 +695,6 @@ class OCRPage(QWidget):
         self._worker.start()
 
     def _on_batch_item(self, pack):
-        from PySide6.QtWidgets import QTableWidgetItem
         r = self.batch_table.rowCount()
         self.batch_table.insertRow(r)
         for j, v in enumerate((pack.get("tag", "")[-40:],

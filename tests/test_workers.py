@@ -52,6 +52,7 @@ def test_benchmark_core_worker_result_and_cancel():
 def test_close_stops_workers_no_hang():
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont
+
     from gui.main_window import MainWindow
     app = _app()
     win = MainWindow()
