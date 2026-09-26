@@ -5,10 +5,23 @@ import logging
 import os
 import shutil
 
-from PySide6.QtWidgets import (QComboBox, QDialog, QDialogButtonBox, QFileDialog,
-                               QFormLayout, QHBoxLayout, QLabel, QLineEdit,
-                               QMessageBox, QPushButton, QTableWidget,
-                               QTableWidgetItem, QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
+    QFileDialog,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 
@@ -52,8 +65,8 @@ class EntryDialog(QDialog):
 
     def _save_check(self):
         try:
-            from enigma import spec_for
             import keydb
+            from enigma import spec_for
             model = self.f_model.currentText()
             spec = spec_for(model)
             wheels = self.f_rotors.text().split()
@@ -168,6 +181,16 @@ class KeysPage(QWidget):
         self.search()
 
     def _load(self, path=None):
+        if path is None:
+            # R-06: путь из Settings используется как дефолт, если файл есть.
+            try:
+                from PySide6.QtCore import QSettings
+                configured = (QSettings("EnigmaDecoder", "enigma").value(
+                    "dbpath", "") or "").strip()
+                if configured and os.path.exists(configured):
+                    path = configured
+            except Exception:  # noqa: BLE001
+                path = None
         try:
             self._entries = services.db_entries(path)
             if path:
@@ -296,7 +319,6 @@ class KeysPage(QWidget):
         self.search()
 
     def _import(self):
-        from PySide6.QtWidgets import QFileDialog
         path, _ = QFileDialog.getOpenFileName(self, "Import key database",
                                               "", "JSON (*.json)")
         if not path:
@@ -322,7 +344,6 @@ class KeysPage(QWidget):
         self.search()
 
     def _export(self):
-        from PySide6.QtWidgets import QFileDialog
         path, _ = QFileDialog.getSaveFileName(self, "Export key database",
                                               "keys_export.json", "JSON (*.json)")
         if not path:

@@ -3,9 +3,18 @@
 """Страница Machine: диагностика состояния + пошаговый тест (double-step)."""
 import logging
 
-from PySide6.QtWidgets import (QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-                               QMessageBox, QPushButton, QTableWidget,
-                               QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 from gui.widgets.machine_widget import MachineWidget
@@ -113,6 +122,7 @@ class MachinePage(QWidget):
             out = self._machine.press(text[0])
         except Exception:  # noqa: BLE001
             log.exception("step error")
+            QMessageBox.warning(self, "Step", "Не удалось обработать символ. См. лог.")
             return
         self.out.setText(self.out.text() + out)
         self.inp.setText(text[1:])

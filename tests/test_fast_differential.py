@@ -155,7 +155,7 @@ def test_external_spot_check_mline():
     """Прямая сверка fast vs py-enigma (транзитивность через own core
     уже доказана test_differential + этим файлом, здесь — точечно)."""
     from _ref_loader import load_reference
-    ref = load_reference()
+    load_reference()
     from ref_enigma.machine import EnigmaMachine as RefMachine
     rm = {"B": "B", "C": "C", "Thin-B": "B-Thin", "Thin-C": "C-Thin"}
     rng = random.Random(SEED + 4)

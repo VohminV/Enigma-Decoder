@@ -1,11 +1,21 @@
 [project]
 name = "enigma-decoder"
-version = "0.1.0"
+version = "1.0.0"
 description = "Enigma I/M3/M4/G/K/D decryptor with PySide6 GUI, historical key database and OCR"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Enigma Decoder" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Education",
+]
 
 # Runtime: только то, что реально импортируется кодом.
 # enigma.py/keydb.py/services.py — stdlib only.
@@ -22,6 +32,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
+    "ruff>=0.4",
+    "build>=1.0",
+    "pip-audit>=2.7",
     # Reference-движок для differential-тестов (AUD-008). Только тесты:
     # production-код его не импортирует.
     "py-enigma==1.0.2",
@@ -29,13 +42,40 @@ dev = [
 
 [project.scripts]
 enigma-decoder = "main:main"
+enigma = "enigma:main"
+enigma-keydb = "keydb:main"
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+py-modules = ["enigma", "fast_enigma", "keydb", "services", "contracts",
+              "scoring", "xcracker", "legacy", "main", "search_experiments"]
+
 [tool.setuptools.packages.find]
 include = ["gui*", "ocr*"]
 
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["."]
+# Environment-scoped: системный hydra-core 1.0.7 регистрирует pytest11-плагин
+# hydra_pytest, несовместимый с pytest>=8 (падает сбор коллекции до тестов
+# проекта). Отключаем ТОЛЬКО его; остальные плагины работают.
+# См. docs/RELEASE_GATE.md. Не скрывает ошибки проекта: все 118+ тестов
+# выполняются с остальными плагинами включёнными.
+addopts = ["-p", "no:hydra_pytest"]
+markers = [
+    "slow: долгие тесты (OCR на синтетике, benchmark)",
+    "ocr: тесты, требующие OCR-движка/моделей",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]

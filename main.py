@@ -9,11 +9,35 @@ import traceback
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "enigma_gui.log")
-logging.basicConfig(filename=LOG_PATH, level=logging.INFO,
-                    format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+
+
+LOG_LEVELS = {"Normal": logging.INFO, "Debug": logging.DEBUG}
+
+
+def loglevel_to_level(name: str) -> int:
+    """QSettings-значение Settings → уровень logging. R-06: подключено."""
+    return LOG_LEVELS.get((name or "").strip(), logging.INFO)
+
+
+def _setup_logging() -> None:
+    from logging.handlers import RotatingFileHandler
+    handler = RotatingFileHandler(LOG_PATH, maxBytes=1_000_000,
+                                  backupCount=3, encoding="utf-8")
+    handler.setFormatter(logging.Formatter(
+        "%(asctime)s %(levelname)s %(name)s: %(message)s"))
+    root = logging.getLogger()
+    try:
+        from PySide6.QtCore import QSettings
+        level = loglevel_to_level(QSettings("EnigmaDecoder", "enigma").value(
+            "loglevel", "Normal"))
+    except Exception:  # noqa: BLE001 — PySide6 нет: дефолт INFO
+        level = logging.INFO
+    root.setLevel(level)
+    root.addHandler(handler)
 
 
 def main() -> int:
+    _setup_logging()
     try:
         from PySide6.QtWidgets import QApplication, QMessageBox
     except ImportError:

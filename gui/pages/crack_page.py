@@ -5,10 +5,23 @@
 честный статус Not implemented, кнопка отключена."""
 import logging
 
-from PySide6.QtWidgets import (QComboBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel,
-                               QMessageBox, QPushButton, QProgressBar, QRadioButton,
-                               QSplitter, QTableWidget, QTableWidgetItem, QTextEdit,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QRadioButton,
+    QSplitter,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 from gui.workers.crack_worker import CrackWorker
@@ -161,7 +174,7 @@ class CrackPage(QWidget):
                 if self.date_box.findText(e["date"]) < 0:
                     self.date_box.addItem(e["date"])
         except Exception as ex:  # noqa: BLE001
-            log.warning("dates load failed: %s", ex)
+            log.warning("dates load failed: %s", type(ex).__name__)
 
     # --- indicator solver ---
     def _solve(self):
@@ -197,7 +210,7 @@ class CrackPage(QWidget):
         self.hist_note.setText(f"Historical search over {date}…")
         custom = "".join(c for c in self.custom_box.toPlainText().upper()
                          if "A" <= c <= "Z") or None
-        self._worker = CrackWorker(entries, date, self, custom_cipher=custom)
+        self._worker = CrackWorker(entries, date, None, custom_cipher=custom)
         self._worker.progress.connect(self._on_progress)
         self._worker.candidate.connect(self._on_candidate)
         self._worker.finished.connect(self._on_finished)

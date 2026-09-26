@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-from enigma import ROTORS, REFLECTORS, EnigmaMachine, EnigmaG, EnigmaCommercial, _c2i
+from enigma import REFLECTORS, ROTORS, EnigmaCommercial, EnigmaG, EnigmaMachine, _c2i
 
 
 def check(name, got, want_prefix=None, want_exact=None):

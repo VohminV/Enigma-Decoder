@@ -37,8 +37,9 @@ def test_atomic_write_overwrite_keeps_valid_json(tmp_path):
 def test_edit_target_ownership(tmp_path):
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
+
     from gui.pages.keys_page import KeysPage
-    app = QApplication.instance() or QApplication([])
+    _app = QApplication.instance() or QApplication([])
     page = KeysPage()
     default = page._default_db_path()
     # собственная база (или никакая) — правим на месте, не копия

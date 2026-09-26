@@ -2,9 +2,18 @@
 # -*- coding: utf-8 -*-
 """Страница Settings: тема, потоки, база, лог. Хранение — QSettings."""
 from PySide6.QtCore import QSettings
-from PySide6.QtWidgets import (QComboBox, QFileDialog, QFormLayout, QHBoxLayout,
-                               QLabel, QLineEdit, QPushButton, QSpinBox,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFileDialog,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class SettingsPage(QWidget):
@@ -34,7 +43,9 @@ class SettingsPage(QWidget):
         self.threads.setRange(0, 64)
         self.threads.setSpecialValueText("Auto")
         self.threads.setValue(int(self.qs.value("threads", 0)))
-        self.threads.setToolTip("Использоваться будет worker-пулом cracker (Phase 7+)")
+        self.threads.setToolTip(
+            "Зарезервировано под worker-пул cracker (Phase 7+). "
+            "В 1.0.0 ни на что не влияет, значение сохраняется.")
         self.threads.valueChanged.connect(
             lambda v: self.qs.setValue("threads", v))
         form.addRow("Worker threads", self.threads)
@@ -54,6 +65,8 @@ class SettingsPage(QWidget):
         self.loglevel = QComboBox()
         self.loglevel.addItems(["Normal", "Debug"])
         self.loglevel.setCurrentText(self.qs.value("loglevel", "Normal"))
+        self.loglevel.setToolTip("Применяется сразу к лог-файлу enigma_gui.log")
+        self.loglevel.currentTextChanged.connect(self._loglevel)
         form.addRow("Log level", self.loglevel)
 
         self.ocr_engine = QComboBox()
@@ -95,6 +108,12 @@ class SettingsPage(QWidget):
         self.qs.setValue("theme", name)
         if callable(self.theme_changed):
             self.theme_changed(name)
+
+    def _loglevel(self, name):
+        import logging
+        self.qs.setValue("loglevel", name)
+        logging.getLogger().setLevel(
+            logging.DEBUG if name == "Debug" else logging.INFO)
 
     def _browse(self):
         path, _ = QFileDialog.getOpenFileName(self, "Key database", "",

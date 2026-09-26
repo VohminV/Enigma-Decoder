@@ -2,8 +2,17 @@
 # -*- coding: utf-8 -*-
 """Виджет конфигурации машины (общий для Decrypt/Machine).
 Только отображает/читает конфиг; валидация — в services/EnigmaCore."""
-from PySide6.QtWidgets import (QComboBox, QFormLayout, QGroupBox, QHBoxLayout,
-                               QLabel, QPushButton, QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 
@@ -20,8 +29,12 @@ class MachineWidget(QWidget):
         form = QFormLayout()
         self.model_box = QComboBox()
         for key, meta in services.MACHINE_MODELS.items():
-            self.model_box.addItem(meta["label"], key)
-        self.model_box.setToolTip("Историческая модель машины")
+            label = meta["label"] + (" (experimental)" if meta.get("experimental") else "")
+            self.model_box.addItem(label, key)
+        self.model_box.setToolTip(
+            "Историческая модель машины. "
+            "G/G312/G260/K/D — experimental/internal-verified "
+            "(внешнего эталона нет).")
         form.addRow("Machine", self.model_box)
         lay.addLayout(form)
 

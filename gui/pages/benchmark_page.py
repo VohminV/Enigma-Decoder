@@ -3,8 +3,16 @@
 """Страница Benchmark: замер ядра (реален); Fast/Cracker — Not implemented."""
 import logging
 
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                               QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 log = logging.getLogger("enigma_gui")
 
@@ -134,6 +142,6 @@ class BenchmarkPage(QWidget):
         self._done()
 
     def _on_error(self, msg):
-        log.exception("benchmark worker failed: %s", msg)
-        QMessageBox.critical(self, "Benchmark", f"Ошибка замера: {msg}")
+        log.exception("benchmark worker failed")
+        QMessageBox.critical(self, "Benchmark", "Ошибка замера. Подробности в логе.")
         self._done()

@@ -1,0 +1,7 @@
+# sdist-дополнения: исторические данные, тестовый скоринг-корпус и
+# релизная документация должны ехать в архиве исходников.
+include keys.json
+include LICENSE README.md SECURITY.md CHANGELOG.md RELEASE_NOTES.md ARCHITECTURE.md
+recursive-include data/scoring *.txt *.json *.md
+recursive-include Examples *
+global-exclude __pycache__ *.py[cod] *.log .venv venv

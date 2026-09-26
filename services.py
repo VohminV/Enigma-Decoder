@@ -14,8 +14,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import keydb  # noqa: E402
-from enigma import (EnigmaCommercial, EnigmaG, EnigmaMachine,  # noqa: E402
-                    MACHINE_SPECS, spec_for)
+from enigma import MACHINE_SPECS, EnigmaCommercial, EnigmaG, EnigmaMachine, spec_for  # noqa: E402
 
 # Метаданные моделей для комбобоксов. Структура/размерности — из
 # enigma.MachineSpec (единый источник истины, AUD-002); здесь только
@@ -45,6 +44,8 @@ for _key, _spec in MACHINE_SPECS.items():
         "greek": _key == "M4",
         "rings": _spec.rings,
         "positions": _spec.positions,
+        # R-01: G/K/D — experimental/internal-verified (нет внешнего эталона).
+        "experimental": _key in ("G", "G312", "G260", "K", "D"),
     }
     if _key in _G_VARIANTS:
         MACHINE_MODELS[_key]["variant"] = _G_VARIANTS[_key]
@@ -125,7 +126,11 @@ def entry_machine_config(entry: dict, positions: str) -> dict:
            "positions": positions,
            "plugs": entry.get("plugs", ""),
            "ukw_pos": "A", "ukw_ring": "A"}
-    assert len(cfg["positions"]) == n_wheels, "positions mismatch"
+    if len(cfg["positions"]) != n_wheels:
+        raise ValueError(
+            f"positions mismatch: ожидалось {n_wheels} букв, "
+            f"получено {len(cfg['positions'])}"
+        )
     return cfg
 
 

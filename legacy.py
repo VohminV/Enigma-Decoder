@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import os
 
-from enigma import EnigmaCommercial, EnigmaG, EnigmaMachine
+from enigma import EnigmaG, EnigmaMachine
 
 DIGITS = {"1": "I", "2": "II", "3": "III", "4": "IV",
           "5": "V", "6": "VI", "7": "VII", "8": "VIII",
@@ -53,17 +53,26 @@ def load_machine(path: str):
     if profile == "ABWEHR":
         # Order = [UKW-sel, L, M, R], напр. "1321" -> колёса III II I.
         # Позиции/кольца UKW — из секции [UKW], колёс — последние 3 буквы.
-        order = vals["rotors.order"]
-        wheels = [DIGITS[c] for c in order[1:]]
+        try:
+            order = vals["rotors.order"]
+            rings = vals["ukw.ring"] + vals["rotors.rings"][1:]
+            start = vals["ukw.start"] + vals["rotors.start"][1:]
+        except KeyError as ex:
+            raise ValueError(f"В файле {path!r} нет обязательного поля: {ex}") from None
+        try:
+            wheels = [DIGITS[c] for c in order[1:]]
+        except KeyError as ex:
+            raise ValueError(f"Неизвестный символ в order {order!r}: {ex}") from None
         variant = "G312" if "312" in skin else ("G260" if "260" in skin else "G")
-        rings = vals["ukw.ring"] + vals["rotors.rings"][1:]
-        start = vals["ukw.start"] + vals["rotors.start"][1:]
         return EnigmaG(variant, tuple(wheels), rings, start)
     is_m4 = profile == "M4"
-    order = [DIGITS[c] for c in vals["rotors.order"]]
-    rings = vals["rotors.rings"]
-    start = vals["rotors.start"]
-    ukw = vals["ukw.select"]
+    try:
+        order = [DIGITS[c] for c in vals["rotors.order"]]
+        rings = vals["rotors.rings"]
+        start = vals["rotors.start"]
+        ukw = vals["ukw.select"]
+    except KeyError as ex:
+        raise ValueError(f"В файле {path!r} нет обязательного поля: {ex}") from None
     refl = ("Thin-" if is_m4 else "") + ukw
     plugs = matrix_to_plugs(vals.get("steckers.matrix", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
     if not is_m4:

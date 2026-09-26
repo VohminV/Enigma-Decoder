@@ -66,7 +66,7 @@ def test_synthetic_crack_finds_known_key():
     results = eng.search(cipher)
     assert len(results) <= 20
     keys = [c.key for c in results]
-    assert TRUE_POS in keys, f"true key not in top-20, rank unknown"
+    assert TRUE_POS in keys, "true key not in top-20, rank unknown"
     rank = keys.index(TRUE_POS) + 1
     print(f"\nsynthetic crack: true key {TRUE_POS} rank {rank}/676")
     winner = results[0]

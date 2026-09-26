@@ -19,7 +19,6 @@ from dataclasses import dataclass, field
 
 import scoring
 import services
-from contracts import Candidate
 from fast_enigma import FastEnigma, decode_ints, encode_text
 
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -28,10 +27,15 @@ LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def _test_vocab() -> list[str]:
-    words = [w for w in
-             open("data/scoring/test_corpus.txt", encoding="utf-8").read().split()
-             if w != "X"]
-    return words
+    import os
+    here = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(here, "data", "scoring", "test_corpus.txt")
+    try:
+        with open(path, encoding="utf-8") as f:
+            words = f.read().split()
+    except OSError as ex:
+        raise RuntimeError(f"Не могу прочитать тестовый корпус {path}: {ex}") from ex
+    return [w for w in words if w != "X"]
 
 
 def make_text(rng: random.Random, length: int,

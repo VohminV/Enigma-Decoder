@@ -3,8 +3,16 @@
 """Страница Decrypt: ручная шифровка/расшифровка через EnigmaCore."""
 import logging
 
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                               QSplitter, QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QSplitter,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 import services
 from gui.widgets.machine_widget import MachineWidget
@@ -92,7 +100,9 @@ class DecryptPage(QWidget):
             cfg = self.machine.get_config()
             out = services.process_text(cfg, src)
         except ValueError as ex:
-            log.warning("decrypt failed: %s", ex)
+            # Без key-material в логе: детали уже показаны пользователю
+            # в диалоге (он сам их ввёл). В лог — только тип ошибки.
+            log.warning("decrypt failed: %s", type(ex).__name__)
             QMessageBox.warning(self, "Неверная конфигурация", str(ex))
             return
         except Exception:  # noqa: BLE001

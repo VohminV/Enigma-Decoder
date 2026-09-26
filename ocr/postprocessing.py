@@ -8,8 +8,7 @@ Aggressive: + 6/G 2/Z.
 """
 from __future__ import annotations
 
-from ocr.models import (AGGRESSIVE_EXTRA, BALANCED_FIXES, Correction,
-                        NormalizedResult, OCRBlock)
+from ocr.models import AGGRESSIVE_EXTRA, BALANCED_FIXES, Correction, NormalizedResult, OCRBlock
 
 
 def levenshtein(a: str, b: str) -> int:

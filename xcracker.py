@@ -49,11 +49,19 @@ class TopCandidates:
         return len(self._heap)
 
 
-def positions_sweep(template: str) -> list[str]:
+def positions_sweep(template: str, max_results: int = 100_000) -> list[str]:
     """'AB?' -> 26 вариантов; '???' -> 17576. '?' = любая A-Z по порядку.
-    Размер ограничивает вызывающий (это experimental инструмент)."""
+    Объём ограничен max_results (защита от OOM: '??????' = 309M)."""
     pools = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ" if c == "?" else c
              for c in template.upper()]
+    total = 1
+    for p in pools:
+        total *= len(p)
+        if total > max_results:
+            raise ValueError(
+                f"Шаблон {template!r}: {total}+ вариантов "
+                f"(лимит {max_results}). Уточните шаблон."
+            )
     return ["".join(p) for p in itertools.product(*pools)]
 
 

@@ -1,0 +1,89 @@
+name: ci
+
+on:
+  push:
+    branches: [main, "release/**"]
+  pull_request:
+  tags:
+    - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      # NOTE: actions version-pinned (v4/v5/v2). SHA-pinning — follow-up
+      # мейнтейнера при наличии сети: см. docs/RELEASE_GATE.md §6.
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.12"
+      - name: Install Qt system deps (offscreen GUI tests)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libopengl0 libxkbcommon0 \
+            libdbus-1-3 libfontconfig1
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+      - run: python tests/test_core.py
+      - run: python tests/test_vectors.py
+      - run: python tests/test_keydb.py
+      - run: python legacy.py
+      - run: python tests/test_gui.py
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.12"
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - uses: actions/upload-artifact@v4.6.0
+        with:
+          name: dist
+          path: dist/*
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.12"
+      - run: pip install -e . pip-audit
+      - run: pip audit
+    # NOTE: этому job явно разрешена сеть (реестр PyPI) для аудита уязвимостей.
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs: [lint, test, build]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4.1.8
+        with:
+          name: dist
+          path: dist
+      - uses: softprops/action-gh-release@v2.0.8
+        with:
+          files: dist/*
+          body_path: RELEASE_NOTES.md

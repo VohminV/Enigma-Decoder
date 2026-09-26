@@ -5,8 +5,16 @@ import logging
 
 from PySide6.QtCore import QSettings
 from PySide6.QtGui import QKeySequence, QShortcut
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QMainWindow, QPushButton,
-                               QStackedWidget, QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QPushButton,
+    QStackedWidget,
+    QStatusBar,
+    QVBoxLayout,
+    QWidget,
+)
 
 from gui.pages.benchmark_page import BenchmarkPage
 from gui.pages.crack_page import CrackPage

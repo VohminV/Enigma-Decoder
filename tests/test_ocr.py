@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 
 from ocr.engine import RapidOCREngine  # noqa: E402
 from ocr.models import PROFILES, OCRCharacter  # noqa: E402
-from ocr.pipeline import OCRService, load_image_rgba  # noqa: E402
+from ocr.pipeline import OCRService  # noqa: E402
 from ocr.postprocessing import (  # noqa: E402
     EnigmaTextNormalizer,
     cer,

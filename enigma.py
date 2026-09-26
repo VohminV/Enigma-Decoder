@@ -30,14 +30,47 @@ from __future__ import annotations
 
 import argparse
 import sys
+import warnings
 from dataclasses import dataclass
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 A_ORD = ord("A")
 
+# G/K/D: internal-verified (roundtrip + таблицы Examples/Notches), внешнего
+# побайтового исторического эталона не найдено. M-line (I/M3/M4) подтверждён
+# векторами + differential против py-enigma 1.0.2. См. README/ARCHITECTURE.
+EXPERIMENTAL_MODELS = frozenset({"G", "G312", "G260", "K", "D"})
+
+
+def warn_experimental(model: str) -> None:
+    if model in EXPERIMENTAL_MODELS:
+        warnings.warn(
+            f"Модель {model}: experimental/internal-verified "
+            "(внешнего исторического эталона нет).",
+            UserWarning, stacklevel=3,
+        )
+
+# Release 1.0.0 hardening limits (DoS-защита локального CLI/GUI/library).
+# GUI показывает понятную ошибку до шифрования; CLI отказывает до чтения.
+MAX_TEXT_CHARS = 1_000_000
+MAX_FILE_BYTES = 5_000_000
+
+
+def _check_text_budget(text: str) -> None:
+    if len(text) > MAX_TEXT_CHARS:
+        raise ValueError(
+            f"Текст слишком длинный: {len(text)} символов "
+            f"(лимит {MAX_TEXT_CHARS}). Разбейте на части."
+        )
+
 
 def _c2i(c: str) -> int:
     return ord(c) - A_ORD
+
+
+def _require_single_letter(ch: str, what: str = "Символ") -> None:
+    if not isinstance(ch, str) or len(ch) != 1 or ch not in ALPHABET:
+        raise ValueError(f"{what}: ожидается одна буква A-Z, получено {ch!r}")
 
 
 def _i2c(i: int) -> str:
@@ -233,6 +266,14 @@ def normalize_rotor(name: str) -> str:
     key = name.strip().upper()
     if key not in _ROTOR_ALIASES:
         raise ValueError(f"Неизвестный ротор: {name!r}. Допустимы: I..VIII, Beta, Gamma")
+    if key in ("B", "G"):
+        # R-05: однобуквенные алиасы двусмысленны (B=reflector? G=вариант?).
+        # Оставлены для совместимости, но помечены deprecated.
+        warnings.warn(
+            f"Алиас ротора {name!r} двусмысленен; используйте "
+            f"{_ROTOR_ALIASES[key]!r}.",
+            DeprecationWarning, stacklevel=2,
+        )
     return _ROTOR_ALIASES[key]
 
 
@@ -382,6 +423,13 @@ class EnigmaMachine:
                 raise ValueError(f"Неизвестная модель M-line: {model!r}. Допустимы: I, M3, M4")
         if refl in ("THIN-B", "THIN-C") and not self.is_m4:
             raise ValueError("Тонкие рефлекторы Thin-B/Thin-C — только для M4 (4 ротора)")
+        # Исторически один физический ротор нельзя использовать дважды.
+        movers = names if not self.is_m4 else names[1:]
+        if len(set(movers)) != len(movers):
+            raise ValueError(
+                f"Роторы не должны повторяться: {' '.join(names)}. "
+                "Каждый подвижный ротор используется один раз."
+            )
         self.model_name = model
 
         n = len(rotors)
@@ -422,6 +470,7 @@ class EnigmaMachine:
         return self.plugboard.get(c, c)
 
     def press(self, ch: str) -> str:
+        _require_single_letter(ch, "press")
         c = _c2i(ch)
         self._step()
         c = self._plug(c)
@@ -436,6 +485,10 @@ class EnigmaMachine:
         return _i2c(c)
 
     def encipher(self, text: str) -> str:
+        """Шифр = дешифр при тех же настройках. Не-буквы отбрасываются
+        (см. README «Правила обработки текста»); честный round-trip
+        только для A-Z. Лимит MAX_TEXT_CHARS."""
+        _check_text_budget(text)
         out: list[str] = []
         for ch in text.upper():
             if ch in ALPHABET:
@@ -448,6 +501,8 @@ class EnigmaMachine:
 class EnigmaG:
     """Abwehr Enigma G (Zählwerk): колёса I–III (3 варианта проводок),
     подвижный UKW с кольцом, ETW = QWERTZ, без штекеров.
+    EXPERIMENTAL/internal-verified: внешнего побайтового исторического
+    эталона нет (только roundtrip + таблицы Examples/Notches).
     Шестерёночный carry-шаг: правый всегда; средний — если правый в
     engagement-окне; левый — если средний шагнул И был в окне;
     UKW — если левый шагнул И был в окне. Двойного шага нет."""
@@ -462,6 +517,7 @@ class EnigmaG:
         variant = variant.upper()
         if variant not in G_VARIANTS:
             raise ValueError(f"Неизвестный вариант G: {variant!r}. Допустимы: G, G312, G260")
+        warn_experimental(variant)
         w = tuple(x.upper() for x in wheels)
         if len(w) != 3 or any(x not in ("I", "II", "III") for x in w):
             raise ValueError("Enigma G: 3 колеса I–III в любом порядке")
@@ -510,6 +566,7 @@ class EnigmaG:
             self.ukw.step()
 
     def press(self, ch: str) -> str:
+        _require_single_letter(ch, "press")
         c = _c2i(ch)
         self._step()
         c = self.etw[c]
@@ -521,6 +578,10 @@ class EnigmaG:
         return _i2c(self.etw_inv[c])
 
     def encipher(self, text: str) -> str:
+        """Шифр = дешифр при тех же настройках. Не-буквы отбрасываются
+        (см. README «Правила обработки текста»); честный round-trip
+        только для A-Z. Лимит MAX_TEXT_CHARS."""
+        _check_text_budget(text)
         out: list[str] = []
         for ch in text.upper():
             if ch in ALPHABET:
@@ -533,6 +594,8 @@ class EnigmaG:
 class EnigmaCommercial:
     """Commercial K (A27) / D (A26): коммерческая проводка, settable
     неподвижный UKW с кольцом, ETW = QWERTZ, без штекеров, рычажный шаг.
+    EXPERIMENTAL/internal-verified: внешнего побайтового исторического
+    эталона нет (только roundtrip + unit на сдвиг окна D).
     Engagement: K = Y/E/N (notch на кольце); D = notch на корпусе
     (engagement-окно = Y + ring)."""
 
@@ -548,6 +611,7 @@ class EnigmaCommercial:
         model = model.upper()
         if model not in ("K", "D"):
             raise ValueError(f"Неизвестная commercial-модель: {model!r}. Допустимы: K, D")
+        warn_experimental(model)
         w = tuple(x.upper() for x in wheels)
         if len(w) != 3 or any(x not in ("I", "II", "III") for x in w):
             raise ValueError("Commercial: 3 колеса I–III в любом порядке")
@@ -592,6 +656,7 @@ class EnigmaCommercial:
         _step_service_trio(self.rotors[0], self.rotors[1], self.rotors[2])
 
     def press(self, ch: str) -> str:
+        _require_single_letter(ch, "press")
         c = _c2i(ch)
         self._step()
         c = self.etw[c]
@@ -603,6 +668,10 @@ class EnigmaCommercial:
         return _i2c(self.etw_inv[c])
 
     def encipher(self, text: str) -> str:
+        """Шифр = дешифр при тех же настройках. Не-буквы отбрасываются
+        (см. README «Правила обработки текста»); честный round-trip
+        только для A-Z. Лимит MAX_TEXT_CHARS."""
+        _check_text_budget(text)
         out: list[str] = []
         for ch in text.upper():
             if ch in ALPHABET:
@@ -666,6 +735,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "         --rings AAAA --positions NZAM --text HELLO\n"
             "  K:   python enigma.py --model K --rotors I II III\n"
             "         --rings AAA --positions AAA --text HELLO\n"
+            "G/G312/G260/K/D — experimental/internal-verified "
+            "(внешнего эталона нет); I/M3/M4 — validated."
         ),
     )
     p.add_argument("--model", default=None,
@@ -704,12 +775,22 @@ def main(argv: list[str] | None = None) -> int:
     cipher = args.text
     if cipher is None:
         try:
+            import os
+            size = os.path.getsize(args.infile)
+            if size > MAX_FILE_BYTES:
+                print(f"Файл слишком большой: {size} байт "
+                      f"(лимит {MAX_FILE_BYTES}).", file=sys.stderr)
+                return 1
             with open(args.infile, encoding="utf-8") as f:
-                cipher = f.read()
+                cipher = f.read(MAX_TEXT_CHARS + 1)
         except OSError as e:
             print(f"Не могу прочитать {args.infile}: {e}", file=sys.stderr)
             return 1
-    plain = machine.decipher(cipher)
+    try:
+        plain = machine.decipher(cipher)
+    except ValueError as e:
+        print(f"Ошибка обработки: {e}", file=sys.stderr)
+        return 2
     if args.group5:
         plain = format_groups(plain)
     if args.outfile:
