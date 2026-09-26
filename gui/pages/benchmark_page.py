@@ -134,6 +134,6 @@ class BenchmarkPage(QWidget):
         self._done()
 
     def _on_error(self, msg):
-        log.exception("benchmark worker failed: %s", msg)
-        QMessageBox.critical(self, "Benchmark", f"Ошибка замера: {msg}")
+        log.exception("benchmark worker failed")
+        QMessageBox.critical(self, "Benchmark", "Ошибка замера. Подробности в логе.")
         self._done()

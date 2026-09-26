@@ -113,6 +113,7 @@ class MachinePage(QWidget):
             out = self._machine.press(text[0])
         except Exception:  # noqa: BLE001
             log.exception("step error")
+            QMessageBox.warning(self, "Step", "Не удалось обработать символ. См. лог.")
             return
         self.out.setText(self.out.text() + out)
         self.inp.setText(text[1:])

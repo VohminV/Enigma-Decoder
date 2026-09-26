@@ -12,9 +12,21 @@ class PlugboardDialog(QDialog):
         self.setModal(True)
         self._pairs: list[tuple[str, str]] = []
         self._sel: str | None = None
+        self._initial_warning = ""
         for token in initial.split():
-            if len(token) == 2:
-                self._pairs.append((token[0], token[1]))
+            t = token.strip().upper()
+            if len(t) != 2 or not ("A" <= t[0] <= "Z" and "A" <= t[1] <= "Z"):
+                self._initial_warning = f"Пропущена некорректная пара: {token!r}."
+                continue
+            if t[0] == t[1] or any(t[0] in p or t[1] in p for p in self._pairs):
+                self._initial_warning = (
+                    f"Пропущена конфликтующая пара: {token!r}."
+                )
+                continue
+            if len(self._pairs) >= 10:
+                self._initial_warning = "Начальных пар больше 10: лишние пропущены."
+                break
+            self._pairs.append((t[0], t[1]))
 
         lay = QVBoxLayout(self)
         lay.addWidget(QLabel("Кликните две буквы, чтобы соединить их кабелем."))
@@ -31,6 +43,10 @@ class PlugboardDialog(QDialog):
         lay.addLayout(grid)
         self.info = QLabel()
         lay.addWidget(self.info)
+        if self._initial_warning:
+            warn = QLabel(self._initial_warning)
+            warn.setObjectName("muted")
+            lay.addWidget(warn)
         row = QHBoxLayout()
         self.clear_btn = QPushButton("Clear")
         self.clear_btn.setObjectName("secondary")

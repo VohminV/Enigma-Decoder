@@ -9,11 +9,21 @@ import traceback
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "enigma_gui.log")
-logging.basicConfig(filename=LOG_PATH, level=logging.INFO,
-                    format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+
+
+def _setup_logging() -> None:
+    from logging.handlers import RotatingFileHandler
+    handler = RotatingFileHandler(LOG_PATH, maxBytes=1_000_000,
+                                  backupCount=3, encoding="utf-8")
+    handler.setFormatter(logging.Formatter(
+        "%(asctime)s %(levelname)s %(name)s: %(message)s"))
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    root.addHandler(handler)
 
 
 def main() -> int:
+    _setup_logging()
     try:
         from PySide6.QtWidgets import QApplication, QMessageBox
     except ImportError:

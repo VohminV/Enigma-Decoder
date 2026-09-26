@@ -92,7 +92,9 @@ class DecryptPage(QWidget):
             cfg = self.machine.get_config()
             out = services.process_text(cfg, src)
         except ValueError as ex:
-            log.warning("decrypt failed: %s", ex)
+            # Без key-material в логе: детали уже показаны пользователю
+            # в диалоге (он сам их ввёл). В лог — только тип ошибки.
+            log.warning("decrypt failed: %s", type(ex).__name__)
             QMessageBox.warning(self, "Неверная конфигурация", str(ex))
             return
         except Exception:  # noqa: BLE001

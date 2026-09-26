@@ -29,6 +29,9 @@ from enigma import (EnigmaCommercial, EnigmaG, EnigmaMachine,  # noqa: E402
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "keys.json")
 
+# DoS-защита: база читается целиком (по дизайну плоский JSON на 5 записей).
+MAX_DB_BYTES = 10_000_000
+
 
 def atomic_write_json(path: str, data: dict) -> None:
     """Атомарная запись JSON (AUD-007): временный файл в том же каталоге
@@ -241,8 +244,15 @@ def validate_db(entries: list) -> dict[str, list[str]]:
 
 
 def load_db(path: str = DB_PATH) -> list[dict]:
+    size = os.path.getsize(path)
+    if size > MAX_DB_BYTES:
+        raise ValueError(
+            f"База слишком большая: {size} байт (лимит {MAX_DB_BYTES})."
+        )
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
+    if not isinstance(data, dict) or not isinstance(data.get("entries"), list):
+        raise ValueError("bad format: корень — объект с полем 'entries' (список)")
     return data["entries"]
 
 

@@ -191,11 +191,15 @@ class FastEnigma:
         if self.model in ("G", "G312", "G260"):
             if len(positions) != 4:
                 raise ValueError("G positions: 4 буквы [UKW,L,M,R]")
+            if any(not ("A" <= c <= "Z") for c in positions):
+                raise ValueError(f"Некорректные позиции G: {positions!r}. Только A-Z.")
             self._ukw_pos = ord(positions[0]) - 65
             self._pos = [ord(c) - 65 for c in positions[1:]]
         else:
             if len(positions) != self._n:
                 raise ValueError("positions length mismatch")
+            if any(not ("A" <= c <= "Z") for c in positions):
+                raise ValueError(f"Некорректные позиции: {positions!r}. Только A-Z.")
             self._pos = [ord(c) - 65 for c in positions]
 
     @property

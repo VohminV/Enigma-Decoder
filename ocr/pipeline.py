@@ -21,21 +21,38 @@ from ocr.preprocessing import auto_text_region, preprocess
 
 def load_image_rgba(source) -> np.ndarray:
     """Файл/Binary/PIL -> RGB numpy. Вход не мутирует."""
+    from PIL import Image as _Image
+    _Image.MAX_IMAGE_PIXELS = 50_000_000
     if isinstance(source, np.ndarray):
         arr = source.copy()
+        if arr.size > 50_000_000:
+            raise ValueError("Изображение слишком большое (>50 МП). Уменьшите размер.")
         if arr.ndim == 2:
             arr = np.stack([arr] * 3, axis=-1)
         return arr[:, :, :3].copy()
     if isinstance(source, Image.Image):
+        if source.size[0] * source.size[1] > 50_000_000:
+            raise ValueError("Изображение слишком большое (>50 МП). Уменьшите размер.")
         return np.array(source.convert("RGB"))
     if isinstance(source, (bytes, bytearray)):
+        if len(source) > 30_000_000:
+            raise ValueError("Файл изображения слишком большой (>30 МБ).")
         return np.array(Image.open(io.BytesIO(bytes(source))).convert("RGB"))
     # путь к файлу
+    import os
+    try:
+        if os.path.getsize(source) > 30_000_000:
+            raise ValueError("Файл изображения слишком большой (>30 МБ).")
+    except OSError:
+        pass
     return np.array(Image.open(source).convert("RGB"))
 
 
 def render_pdf(source, dpi: int = 200, pages: list[int] | None = None):
     """PDF -> [(page_no_1based, RGB)]. Требует pymupdf."""
+    if not 72 <= int(dpi) <= 400:
+        raise ValueError(f"DPI вне диапазона 72..400: {dpi!r}")
+    dpi = int(dpi)
     try:
         import fitz
     except ImportError as ex:

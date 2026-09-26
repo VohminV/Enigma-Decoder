@@ -1,6 +1,6 @@
 [project]
 name = "enigma-decoder"
-version = "0.1.0"
+version = "1.0.0"
 description = "Enigma I/M3/M4/G/K/D decryptor with PySide6 GUI, historical key database and OCR"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,6 +22,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
+    "ruff>=0.4",
+    "build>=1.0",
+    "pip-audit>=2.7",
     # Reference-движок для differential-тестов (AUD-008). Только тесты:
     # production-код его не импортирует.
     "py-enigma==1.0.2",

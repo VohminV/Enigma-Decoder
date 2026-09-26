@@ -125,7 +125,11 @@ def entry_machine_config(entry: dict, positions: str) -> dict:
            "positions": positions,
            "plugs": entry.get("plugs", ""),
            "ukw_pos": "A", "ukw_ring": "A"}
-    assert len(cfg["positions"]) == n_wheels, "positions mismatch"
+    if len(cfg["positions"]) != n_wheels:
+        raise ValueError(
+            f"positions mismatch: ожидалось {n_wheels} букв, "
+            f"получено {len(cfg['positions'])}"
+        )
     return cfg
 
 

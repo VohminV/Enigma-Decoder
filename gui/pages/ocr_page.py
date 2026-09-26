@@ -537,7 +537,7 @@ class OCRPage(QWidget):
 
     def _launch(self, task):
         from ocr.worker import OCRWorker
-        self._worker = OCRWorker(task, self)
+        self._worker = OCRWorker(task, None)
         self._worker.preprocessing.connect(
             lambda s: self.status.setText("Preprocessing: " + s))
         self._worker.ocr_progress.connect(
@@ -676,7 +676,7 @@ class OCRPage(QWidget):
         task = self._task_base()
         task.update(kind="image", paths=list(self._batch_files))
         self.batch_table.setRowCount(0)
-        self._worker = OCRWorker(task, self)
+        self._worker = OCRWorker(task, None)
         self._worker.result.connect(self._on_batch_item)
         self._worker.finished.connect(lambda _: self._done())
         self._worker.cancelled.connect(lambda: self._done())

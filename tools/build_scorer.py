@@ -42,6 +42,9 @@ def main(argv=None) -> int:
         model = scoring.TetragramScorer(table, floor, name)
     else:
         model = scoring.NGramScorer(args.order, table, floor, name)
+    out_dir = os.path.dirname(os.path.abspath(args.out))
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     model.save(args.out)
     print(f"order={args.order} grams={len(table)} floor={floor:.3f} -> {args.out}")
     return 0

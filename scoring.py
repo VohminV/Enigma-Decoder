@@ -97,8 +97,16 @@ class NGramScorer(Scorer):
 
     @classmethod
     def load(cls, path: str) -> "NGramScorer":
+        size = os.path.getsize(path)
+        if size > 50_000_000:
+            raise ValueError(
+                f"Модель скорера слишком большая: {size} байт (лимит 50 МБ)."
+            )
         with open(path, encoding="utf-8") as f:
-            return cls.from_dict(json.load(f))
+            data = json.load(f)
+        if not isinstance(data, dict) or "order" not in data:
+            raise ValueError("bad scorer model format")
+        return cls.from_dict(data)
 
 
 class TetragramScorer(NGramScorer):

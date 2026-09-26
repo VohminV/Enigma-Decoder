@@ -1,0 +1,81 @@
+name: ci
+
+on:
+  push:
+    branches: [main, "release/**"]
+  pull_request:
+  tags:
+    - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2 # pinned
+      - uses: actions/setup-python@v5.3.0 # pinned
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4.2.2 # pinned
+      - uses: actions/setup-python@v5.3.0 # pinned
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+      - run: python tests/test_core.py
+      - run: python tests/test_vectors.py
+      - run: python tests/test_keydb.py
+      - run: python legacy.py
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4.2.2 # pinned
+      - uses: actions/setup-python@v5.3.0 # pinned
+        with:
+          python-version: "3.12"
+      - run: pip install build
+      - run: python -m build
+      - uses: actions/upload-artifact@v4.6.0 # pinned
+        with:
+          name: dist
+          path: dist/*
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2 # pinned
+      - uses: actions/setup-python@v5.3.0 # pinned
+        with:
+          python-version: "3.12"
+      - run: pip install -e . pip-audit
+      - run: pip audit
+    # NOTE: этому job явно разрешена сеть (реестр PyPI) для аудита уязвимостей.
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs: [lint, test, build]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4.1.8 # pinned
+        with:
+          name: dist
+          path: dist
+      - uses: softprops/action-gh-release@v2.0.8 # pinned
+        with:
+          files: dist/*
+          body_path: RELEASE_NOTES.md
