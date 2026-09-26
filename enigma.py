@@ -485,6 +485,9 @@ class EnigmaMachine:
         return _i2c(c)
 
     def encipher(self, text: str) -> str:
+        """Шифр = дешифр при тех же настройках. Не-буквы отбрасываются
+        (см. README «Правила обработки текста»); честный round-trip
+        только для A-Z. Лимит MAX_TEXT_CHARS."""
         _check_text_budget(text)
         out: list[str] = []
         for ch in text.upper():
@@ -498,6 +501,8 @@ class EnigmaMachine:
 class EnigmaG:
     """Abwehr Enigma G (Zählwerk): колёса I–III (3 варианта проводок),
     подвижный UKW с кольцом, ETW = QWERTZ, без штекеров.
+    EXPERIMENTAL/internal-verified: внешнего побайтового исторического
+    эталона нет (только roundtrip + таблицы Examples/Notches).
     Шестерёночный carry-шаг: правый всегда; средний — если правый в
     engagement-окне; левый — если средний шагнул И был в окне;
     UKW — если левый шагнул И был в окне. Двойного шага нет."""
@@ -573,6 +578,9 @@ class EnigmaG:
         return _i2c(self.etw_inv[c])
 
     def encipher(self, text: str) -> str:
+        """Шифр = дешифр при тех же настройках. Не-буквы отбрасываются
+        (см. README «Правила обработки текста»); честный round-trip
+        только для A-Z. Лимит MAX_TEXT_CHARS."""
         _check_text_budget(text)
         out: list[str] = []
         for ch in text.upper():
@@ -586,6 +594,8 @@ class EnigmaG:
 class EnigmaCommercial:
     """Commercial K (A27) / D (A26): коммерческая проводка, settable
     неподвижный UKW с кольцом, ETW = QWERTZ, без штекеров, рычажный шаг.
+    EXPERIMENTAL/internal-verified: внешнего побайтового исторического
+    эталона нет (только roundtrip + unit на сдвиг окна D).
     Engagement: K = Y/E/N (notch на кольце); D = notch на корпусе
     (engagement-окно = Y + ring)."""
 
@@ -658,6 +668,9 @@ class EnigmaCommercial:
         return _i2c(self.etw_inv[c])
 
     def encipher(self, text: str) -> str:
+        """Шифр = дешифр при тех же настройках. Не-буквы отбрасываются
+        (см. README «Правила обработки текста»); честный round-trip
+        только для A-Z. Лимит MAX_TEXT_CHARS."""
         _check_text_budget(text)
         out: list[str] = []
         for ch in text.upper():

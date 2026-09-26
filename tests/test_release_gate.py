@@ -106,6 +106,35 @@ def test_db_resolve_env_override(tmp_path, monkeypatch):
     assert keydb.load_db() == []
 
 
+def test_missing_db_clear_error(tmp_path, monkeypatch, capsys):
+    """Вариант B (Variant B): без keys.json — понятная ошибка, не тишина."""
+    import keydb
+    missing = str(tmp_path / "nope" / "keys.json")
+    monkeypatch.setenv("ENIGMA_KEYS_PATH", missing)
+    with pytest.raises(OSError):
+        keydb.load_db()
+    rc = keydb.main(["list"])
+    assert rc == 1
+    err = capsys.readouterr().err
+    assert "базу" in err.lower() or "keys" in err.lower()
+
+
+def test_non_alpha_control_chars_filtered():
+    import services
+    cfg = services.default_config("M3")
+    m1 = services.build_machine(cfg)
+    m2 = services.build_machine(cfg)
+    assert m1.encipher("A\x00B\nC\tD\x1bE") == m2.encipher("ABCDE")
+
+
+def test_long_mixed_text_filtered_length():
+    import services
+    cfg = services.default_config("M3")
+    text = ("HELLO WORLD 123! " * 100).strip()
+    out = services.build_machine(cfg).encipher(text)
+    assert len(out) == 10 * 100  # только буквы HELLOWORLD×100
+
+
 def test_scoring_test_model_present():
     import scoring
     assert os.path.exists(scoring.TEST_MODEL_PATH)
