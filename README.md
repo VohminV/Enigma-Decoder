@@ -15,6 +15,11 @@
 
 ## Поддерживаемые машины
 
+Статус проверки: **M-line (I/M3/M4) — validated** (исторические векторы +
+differential против `py-enigma 1.0.2`); **G/K/D — experimental /
+internal-verified** (roundtrip + таблицы `Examples/Notches`, внешнего
+побайтового эталона нет; при использовании ядро выдаёт `UserWarning`).
+
 M-line (рычажный шаг, двойной шаг среднего ротора, ETW = алфавит):
 
 - **Enigma I (Heer/Luftwaffe)**: роторы I–V (3 шт.), UKW A/B/C, штекеры (до 10 пар).
@@ -22,8 +27,8 @@ M-line (рычажный шаг, двойной шаг среднего рото
 - **Enigma M4 (U-Boat)**: греческий Beta/Gamma (статичен, не шагает) + 3 ротора I–VIII, тонкие UKW Thin-B/Thin-C, штекеры.
   - Совместимость: `Beta + Thin-B @ A == толстый B`, `Gamma + Thin-C @ A == толстый C` (проверено в `test_vectors.py`).
 
-- **Enigma G (Abwehr, Zählwerk)**: колёса I–III (варианты проводки `G` / `G312` / `G260`), подвижный UKW с кольцом, ETW = QWERTZ, без штекеров, шестерёночный carry-шаг без двойного шага.
-- **Commercial K (A27) / D (A26)**: коммерческая проводка, settable неподвижный UKW с кольцом, ETW = QWERTZ, без штекеров, обычный рычажный шаг. Engagement: K = Y/E/N; D = notch на корпусе (`Y + ring`).
+- **Enigma G (Abwehr, Zählwerk)** *(experimental)*: колёса I–III (варианты проводки `G` / `G312` / `G260`), подвижный UKW с кольцом, ETW = QWERTZ, без штекеров, шестерёночный carry-шаг без двойного шага.
+- **Commercial K (A27) / D (A26)** *(experimental)*: коммерческая проводка, settable неподвижный UKW с кольцом, ETW = QWERTZ, без штекеров, обычный рычажный шаг. Engagement: K = Y/E/N; D = notch на корпусе (`Y + ring`).
 
 Проводки: NSA wiring catalog (Hammarborg/Weierud), cryptomuseum, Hamer.
 

@@ -30,9 +30,10 @@ python enigma.py --model M3 --rotors I II III --reflector B --rings AAA --positi
   входы длиннее лимитов. Это намеренное исправление silent-misconfig.
 
 ## Известные ограничения
-- G/K/D: внутренние таблицы (roundtrip + Examples/Notches); внешнего
-  побайтового эталона не найдено — статус честно зафиксирован, математика
-  не менялась догадками.
+- G/G312/G260/K/D — **experimental / internal-verified** (roundtrip +
+  таблицы `Examples/Notches`; внешнего побайтового эталона не найдено;
+  ядро выдаёт `UserWarning`). M-line (I/M3/M4) — validated векторами
+  и differential-тестами против `py-enigma 1.0.2`.
 - Полный автокрек (CrackerEngine) — `Not implemented` (кнопка отключена);
   доступен historical lookup + indicator solver + экспериментальные
   scorer/fast/search-модули.

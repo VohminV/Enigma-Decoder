@@ -30,10 +30,25 @@ from __future__ import annotations
 
 import argparse
 import sys
+import warnings
 from dataclasses import dataclass
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 A_ORD = ord("A")
+
+# G/K/D: internal-verified (roundtrip + таблицы Examples/Notches), внешнего
+# побайтового исторического эталона не найдено. M-line (I/M3/M4) подтверждён
+# векторами + differential против py-enigma 1.0.2. См. README/ARCHITECTURE.
+EXPERIMENTAL_MODELS = frozenset({"G", "G312", "G260", "K", "D"})
+
+
+def warn_experimental(model: str) -> None:
+    if model in EXPERIMENTAL_MODELS:
+        warnings.warn(
+            f"Модель {model}: experimental/internal-verified "
+            "(внешнего исторического эталона нет).",
+            UserWarning, stacklevel=3,
+        )
 
 # Release 1.0.0 hardening limits (DoS-защита локального CLI/GUI/library).
 # GUI показывает понятную ошибку до шифрования; CLI отказывает до чтения.
@@ -251,6 +266,14 @@ def normalize_rotor(name: str) -> str:
     key = name.strip().upper()
     if key not in _ROTOR_ALIASES:
         raise ValueError(f"Неизвестный ротор: {name!r}. Допустимы: I..VIII, Beta, Gamma")
+    if key in ("B", "G"):
+        # R-05: однобуквенные алиасы двусмысленны (B=reflector? G=вариант?).
+        # Оставлены для совместимости, но помечены deprecated.
+        warnings.warn(
+            f"Алиас ротора {name!r} двусмысленен; используйте "
+            f"{_ROTOR_ALIASES[key]!r}.",
+            DeprecationWarning, stacklevel=2,
+        )
     return _ROTOR_ALIASES[key]
 
 
@@ -489,6 +512,7 @@ class EnigmaG:
         variant = variant.upper()
         if variant not in G_VARIANTS:
             raise ValueError(f"Неизвестный вариант G: {variant!r}. Допустимы: G, G312, G260")
+        warn_experimental(variant)
         w = tuple(x.upper() for x in wheels)
         if len(w) != 3 or any(x not in ("I", "II", "III") for x in w):
             raise ValueError("Enigma G: 3 колеса I–III в любом порядке")
@@ -577,6 +601,7 @@ class EnigmaCommercial:
         model = model.upper()
         if model not in ("K", "D"):
             raise ValueError(f"Неизвестная commercial-модель: {model!r}. Допустимы: K, D")
+        warn_experimental(model)
         w = tuple(x.upper() for x in wheels)
         if len(w) != 3 or any(x not in ("I", "II", "III") for x in w):
             raise ValueError("Commercial: 3 колеса I–III в любом порядке")
@@ -697,6 +722,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "         --rings AAAA --positions NZAM --text HELLO\n"
             "  K:   python enigma.py --model K --rotors I II III\n"
             "         --rings AAA --positions AAA --text HELLO\n"
+            "G/G312/G260/K/D — experimental/internal-verified "
+            "(внешнего эталона нет); I/M3/M4 — validated."
         ),
     )
     p.add_argument("--model", default=None,

@@ -14,8 +14,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2 # pinned
-      - uses: actions/setup-python@v5.3.0 # pinned
+      # NOTE: actions version-pinned (v4/v5/v2). SHA-pinning — follow-up
+      # мейнтейнера при наличии сети: см. docs/RELEASE_GATE.md §6.
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
         with:
           python-version: "3.12"
       - run: pip install -e ".[dev]"
@@ -24,31 +26,37 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
       QT_QPA_PLATFORM: offscreen
     steps:
-      - uses: actions/checkout@v4.2.2 # pinned
-      - uses: actions/setup-python@v5.3.0 # pinned
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
         with:
           python-version: "3.12"
+      - name: Install Qt system deps (offscreen GUI tests)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libopengl0 libxkbcommon0 \
+            libdbus-1-3 libfontconfig1
       - run: pip install -e ".[dev]"
       - run: python -m pytest -q
       - run: python tests/test_core.py
       - run: python tests/test_vectors.py
       - run: python tests/test_keydb.py
       - run: python legacy.py
+      - run: python tests/test_gui.py
 
   build:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - uses: actions/checkout@v4.2.2 # pinned
-      - uses: actions/setup-python@v5.3.0 # pinned
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
         with:
           python-version: "3.12"
-      - run: pip install build
+      - run: pip install build twine
       - run: python -m build
-      - uses: actions/upload-artifact@v4.6.0 # pinned
+      - run: twine check dist/*
+      - uses: actions/upload-artifact@v4.6.0
         with:
           name: dist
           path: dist/*
@@ -56,8 +64,8 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2 # pinned
-      - uses: actions/setup-python@v5.3.0 # pinned
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.3.0
         with:
           python-version: "3.12"
       - run: pip install -e . pip-audit
@@ -71,11 +79,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4.1.8 # pinned
+      - uses: actions/download-artifact@v4.1.8
         with:
           name: dist
           path: dist
-      - uses: softprops/action-gh-release@v2.0.8 # pinned
+      - uses: softprops/action-gh-release@v2.0.8
         with:
           files: dist/*
           body_path: RELEASE_NOTES.md

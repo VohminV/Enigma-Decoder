@@ -45,6 +45,8 @@ for _key, _spec in MACHINE_SPECS.items():
         "greek": _key == "M4",
         "rings": _spec.rings,
         "positions": _spec.positions,
+        # R-01: G/K/D — experimental/internal-verified (нет внешнего эталона).
+        "experimental": _key in ("G", "G312", "G260", "K", "D"),
     }
     if _key in _G_VARIANTS:
         MACHINE_MODELS[_key]["variant"] = _G_VARIANTS[_key]

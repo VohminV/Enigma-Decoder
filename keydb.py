@@ -29,6 +29,25 @@ from enigma import (EnigmaCommercial, EnigmaG, EnigmaMachine,  # noqa: E402
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "keys.json")
 
+
+def resolve_db_path(path: str | None = None) -> str:
+    """Путь к базе: явный аргумент > ENIGMA_KEYS_PATH > рядом с модулем > CWD.
+
+    Нужно для wheel-установок, где keys.json может лежать рядом с модулем
+    (editable/sdist) или задаваться окружением.
+    """
+    if path:
+        return path
+    env = os.environ.get("ENIGMA_KEYS_PATH", "").strip()
+    if env:
+        return env
+    alongside = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "keys.json")
+    if os.path.exists(alongside):
+        return alongside
+    cwd = os.path.join(os.getcwd(), "keys.json")
+    return cwd if os.path.exists(cwd) else alongside
+
 # DoS-защита: база читается целиком (по дизайну плоский JSON на 5 записей).
 MAX_DB_BYTES = 10_000_000
 
@@ -243,13 +262,14 @@ def validate_db(entries: list) -> dict[str, list[str]]:
     return bad
 
 
-def load_db(path: str = DB_PATH) -> list[dict]:
-    size = os.path.getsize(path)
+def load_db(path: str | None = None) -> list[dict]:
+    resolved = resolve_db_path(path)
+    size = os.path.getsize(resolved)
     if size > MAX_DB_BYTES:
         raise ValueError(
             f"База слишком большая: {size} байт (лимит {MAX_DB_BYTES})."
         )
-    with open(path, encoding="utf-8") as f:
+    with open(resolved, encoding="utf-8") as f:
         data = json.load(f)
     if not isinstance(data, dict) or not isinstance(data.get("entries"), list):
         raise ValueError("bad format: корень — объект с полем 'entries' (список)")

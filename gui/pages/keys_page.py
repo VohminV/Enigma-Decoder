@@ -168,6 +168,16 @@ class KeysPage(QWidget):
         self.search()
 
     def _load(self, path=None):
+        if path is None:
+            # R-06: путь из Settings используется как дефолт, если файл есть.
+            try:
+                from PySide6.QtCore import QSettings
+                configured = (QSettings("EnigmaDecoder", "enigma").value(
+                    "dbpath", "") or "").strip()
+                if configured and os.path.exists(configured):
+                    path = configured
+            except Exception:  # noqa: BLE001
+                path = None
         try:
             self._entries = services.db_entries(path)
             if path:
